@@ -1,0 +1,416 @@
+10cc
+13th Floor Elevators
+38. Special
+A Flock Of Seagulls
+AC/DC
+Bryan Adams
+Adam & The Ants
+Aerosmith
+Alice Cooper
+Alice In Chains
+The Allman Brothers Band
+Duane Allman
+America
+Anathema
+Jon Anderson
+Anekdoten
+Anglagard
+Arcade Fire
+Area
+Arctic Monkeys
+Asia
+Atomic Rooster
+Audioslave
+B-52’s
+The Babys
+Bachman Turner Overdrive
+Bad Company
+Bad English
+The Band
+Barclay James Harvest
+Jimmy Barnes
+The Beach Boys
+The Beastie Boys
+The Beatles
+Jeff Beck
+Beck
+Pat Benatar
+Chuck Berry
+Big Big Train
+The Black Angels
+The Black Crowes
+The Black Lips
+Black Oak Arkansas
+Black Sabbath
+Blink-182
+Rosie Bones
+Blondie
+Blood Sweat & Tears
+Bloodrock
+Blue Cheer
+Blue Oyster Cult
+Bon Jovi
+Boston
+Bonnie Bramlett
+The Brian Jonestown Massacre
+Jackson Browne
+Bill Bruford
+Lindsey Buckingham
+Kate Bush
+Butcher Babies
+Camel
+Can
+Caravan
+The Cars
+Johnny Cash
+Harry Chapin
+Charlie Daniels Band
+Cheap Trick
+Chicago
+Eric Clapton
+The Clash
+Kurt Cobain
+Coheed and Cambria
+Leonard Cohen
+Coldplay
+Phil Collins
+Colosseum
+Elvis Costello
+The Cramps
+Chris Cornell
+Counting Crows
+Sheryl Crow
+Cream
+Creedence Clearwater Revival
+Marshall Crenshaw
+Jim Croce
+Crosby, Stills, Nash and Young
+Curved Air
+Deep Purple
+Def Leppard
+Rick Derringer
+Ronnie James Dio
+Dire Straits
+Dixie Dregs
+Donovan
+Dokken
+The Doobie Brothers
+The Doors
+Nick Drake
+Dream Theater
+Duran Duran
+Brian Eno
+The Eagles
+Electric Light Orchestra
+Electric Prunes
+Emerson Lake & Palmer
+Keith Emerson
+The Enid
+Roky Erickson
+Melissa Etheridge
+The Everly Brothers
+The Fabulous Thunderbirds
+Donald Fagan
+Faith No More
+Fanny
+Fate’s Warning
+Faust
+Suzanne Fellini
+Fleshgod Apocalypse
+Fleetwood Mac
+Samantha Fish
+Florence + The Machine
+The Flower Kings
+Focus
+Foghat
+Foo Fighters
+Fotomaker
+Lita Ford
+Foreigner
+Peter Frampton
+Free
+Robert Fripp
+Fueled By Ramen
+Peter Gabriel
+Lady GaGa
+Galahad
+Garbage
+The Germs
+Genesis
+Gentle Giant
+Billy Gibbons
+Dave Gilmour
+Andy Glass
+The Godz
+Gong
+Good Rats
+The Grateful Dead
+The Grass Roots
+Grand Funk Railroad
+Green Day
+Gryphon
+The Guess Who
+Guns N’ Roses
+Steve Hackett
+Sammy Hagar
+Randy Hansen
+George Harrison
+Annie Haslam
+Hatfield and the North
+Hawkwind
+Roy Head
+Heart
+Jimi Hendrix
+Don Henley
+Susanna Hoffs
+Allan Holdsworth
+Hole
+Steve Howe
+Humble Pie
+Ian Hunter
+Billy Idol
+INXS
+IQ
+Iron Butterfly
+Iron Maiden
+The Jam
+Janis Joplin
+J Geils Band
+The James Gang
+Jay And The Americans
+Jefferson Airplane
+Jefferson Starship
+Jethro Tull
+Joan Jett
+Billy Joel
+Elton John
+Robert Johnson
+Journey
+Joy Division
+Judas Priest
+Kansas
+Terry Kath
+Carole King
+The Killers
+King Crimson
+King Gizzard and the Lizard Wizard
+The Kingsmen
+King’s X
+Kings Of Leon
+The Kinks
+Kiss
+Kraftwork
+Krokodil
+Jimi LaLumia
+Lead Belly
+Led Zeppelin
+John Lennon
+Jerry Lee Lewis
+Level 42
+Limp Bizkit
+Linkin Park
+Little Richard
+Lone Justice
+Nick Lowe
+Lynyrd Skynyrd
+Jeff Lynne
+Madness
+Magma
+Mahavishnu Orchestra
+Manfred Mann
+Marillion
+Marilyn Manson
+Marshall Tucker Band
+The Mars Volta
+Dave Mason
+Maria Mckee
+Paul McCartney
+Mike McGear
+Meat Loaf
+Megadeath
+John Mellencamp
+Metallica
+Midnight Flyer
+Steve Miller Band
+John Miles
+Ministry
+Molly Hatchet
+Eddie Money
+The Monkees
+The Moody Blues
+Alanis Morissette
+Van Morrison
+Mostly Autumn
+Motley Crue
+Motorhead
+Mott The Hoople
+Mountain
+Mumford & Sons
+Muse
+My Chemical Romance
+My Bloody Valentine
+Nektar
+New Trolls
+The Nice
+Stevie Nicks
+Nirvana
+Ted Nugent
+Oasis
+Opeth
+Ozzy Osbourne
+Joan Osborne
+Ozric Tentacles
+The Outlaws
+Jimmy Page
+Pallas
+Panic! At The Disco
+Pantera
+Paramore
+Alan Parsons
+Pearl Jam
+Pendragon
+Steve Perry
+Pink Floyd
+The Pixies
+Planet X
+Elvis Presley
+Robert Plant
+Porcupine Tree
+Andy Pratt
+The Pretenders
+Prince
+Procol Harum
+The Police
+Iggy Pop
+Queen
+Queensryche
+Quiet Riot
+Radiohead
+Rage Against The Machine
+The Rascals / Young Rascals
+Bonnie Raitt
+Ram Jam
+The Ramones
+Red Hot Chili Peppers
+Lou Reed
+REM
+Renaissance
+Keith Richards
+The Rolling Stones
+Linda Ronstadt
+Rossington Collins Band
+David Lee Roth
+Roxy Music
+The Runaways
+Todd Rundgren
+Rush
+Leon Russell
+Saga
+Santana
+Saraya
+Savoy Brown
+Boz Scaggs
+Peter Schilling
+The Scorpions
+The Sex Pistols
+Bob Seger
+Brian Setzer
+Joanne Shaw
+Ed Sheeran
+Kim Simmonds
+Simon & Garfunkel
+Carly Simon
+Paul Simon
+Slade
+The Slits
+Soft Machine
+Patti Smith
+Patty Smyth
+Solstice
+Soundgarden
+Southside Johnny
+Spiderbait
+Spock’s Beard
+Spooky Tooth
+Bruce Springsteen
+Squeeze
+Billy Squier
+Mavis Staples
+Ringo Starr
+Starstruck
+Steely Dan
+Steppenwolf
+Cat Stevens
+Al Stewart
+Rod Stewart
+Stephen Stills
+Sting
+The Strawbs
+Stray Cats
+Styx
+The Stooges
+Storyville
+Supertramp
+Sweet
+Matthew Sweet
+System Of A Down
+T. Rex
+Talking Heads
+James Taylor
+Television
+They Might Be Giants
+Thin Lizzy
+George Thorogood
+Three Dog Night
+Tool
+Toto
+Traffic
+Pat Travers
+The Troggs
+The Tragically Hip
+Robin Trower
+Butch Trucks
+Derek Trucks
+Twelfth Night
+Twenty One Pilots
+U2
+UFO
+U.K.
+Uriah Heep
+The Undertones
+Steve Vai
+Gino Vannelli
+Vampire Weekend
+The Vapors
+Van der Graaf Generator
+Van Halen
+Stevie Ray Vaughan
+The Velvet Underground
+Violent Femmes
+John Waite
+Tom Waits
+The Waitresses
+Rick Wakeman
+Joe Walsh
+Roger Water
+Weezer
+Jack White
+The White Stripes
+Whitesnake
+The Who
+Kim Wilde
+Lucinda Williams
+Steven Wilson
+Edgar Winter
+Wolfmother
+Gary Wright
+XTC
+The Yardbirds
+The Yeah Yeah Yeahs
+Yes
+Angus Young
+Neil Young
+Frank Zappa
+Warren Zevon
+The Zombies
+ZZ Top
