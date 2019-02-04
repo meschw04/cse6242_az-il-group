@@ -1,11 +1,9 @@
 This is the project page for Georgia Tech's CSE 6242 (Spring 2019), including the following members:
 
-Marcus Bischof
+Stuart Collani
 
-Josh Mattingly
+Amanpreet Kaur
 
-Erin McKeon
-
-Haseeb Mohammed
+Jay Pranger
 
 Marcus Schwarting
