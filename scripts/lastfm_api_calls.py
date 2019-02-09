@@ -103,16 +103,19 @@ def get_album_info(initial_artist,initial_album):
     album_data = json.loads(urllib.request.urlopen(album_query).read())
     playcount = album_data['album']['playcount']
     listeners = album_data['album']['listeners']
-    tags = [j['name'] for j in album_data['album']['tags']['tag']]
-    image_link = album_data['album']['image'][-1]['#text']
-    pic = urllib.request.urlopen(image_link).read()
-    #Decide filename!
-    filename = 'album_images/'+initial_album+'_'+initial_artist+'.png'
-    with open(filename,'wb') as f:
-        f.write(pic)
-    cv2.imwrite(filename,cv2.resize(cv2.imread(filename),(128,128)))
-    similar = get_similar_albums(initial_artist,initial_album)
-    return [initial_album,initial_artist,playcount,listeners,similar,image_link,filename,tags]
+    if int(playcount)<10**6 or int(listeners)<2*10**5:
+        return []
+    else:
+        tags = [j['name'] for j in album_data['album']['tags']['tag']]
+        image_link = album_data['album']['image'][-1]['#text']
+        pic = urllib.request.urlopen(image_link).read()
+        #Decide filename!
+        filename = 'album_images/'+initial_album.replace('/','')+'_'+initial_artist.replace('/','')+'.png'
+        with open(filename,'wb') as f:
+            f.write(pic)
+        cv2.imwrite(filename,cv2.resize(cv2.imread(filename),(128,128)))
+        similar = get_similar_albums(initial_artist,initial_album)
+        return [initial_album,initial_artist,playcount,listeners,similar,image_link,filename,tags]
 
 
 initial_artist = 'Michael Jackson'
@@ -151,17 +154,17 @@ while i<stop_num:
                     not_original=False
             with open('albums_data.csv','a') as csvfile:
                 writer = csv.writer(csvfile)
-                print(selected_album[0],selected_album[1])
-                writer.writerow(get_album_info(selected_album[0],selected_album[1]))
-                i+=1
+                t = get_album_info(selected_album[0],selected_album[1])
+                if len(t)>0:
+                    print(selected_album[0],selected_album[1])
+                    writer.writerow(t)
+                    i+=1
+                else:
+                    pass
             csvfile.close()
-        except (ValueError,KeyError):
-            pass
+        except:
+            print('Hit an issue. Check the error later.')
         
-#        raise ValueError
-#        with open('albums_data.csv','a') as csvfile:
-        
-
 
 
 
