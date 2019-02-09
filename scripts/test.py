@@ -40,7 +40,7 @@ classic_rock_artists = open('classic_rock_artists.txt', 'r').read().split('\n')
 
 
 #"http://ws.audioscrobbler.com/2.0/?method=artist.getTopAlbums&artist=Spock%27s+Beard&api_key="+my_api_key+"&format=json"
-artist = 'U2'
+artist = 'Michael Jackson'
 address = "http://ws.audioscrobbler.com/2.0/?method=artist.getTopAlbums&artist="+\
             artist+"&api_key="+my_api_key+"&format=json"
 #data = urllib.request.urlopen(address).read()
