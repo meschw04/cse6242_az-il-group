@@ -70,7 +70,13 @@ def get_similar_albums(initial_artist,initial_album):
     most_popular_song = song_list[play_count.index(max(play_count))]
     
     similar_songs,similar_song_artists = get_similar_songs(most_popular_song,initial_artist,limit=25)
-    
+    if len(similar_songs) == 0:
+        try:
+            del song_list[play_count.index(max(play_count))]
+            most_popular_song = song_list[play_count.index(max(play_count))]
+            similar_songs,similar_song_artists = get_similar_songs(most_popular_song,initial_artist,limit=25)
+        except:
+            pass
     #print(similar_songs)
     #print(similar_song_artists)
     similar_albums_li = []
@@ -103,7 +109,7 @@ def get_album_info(initial_artist,initial_album):
     album_data = json.loads(urllib.request.urlopen(album_query).read())
     playcount = album_data['album']['playcount']
     listeners = album_data['album']['listeners']
-    if int(playcount)<10**6 or int(listeners)<2*10**5:
+    if int(playcount)<5*10**5 or int(listeners)<10**5:
         return []
     else:
         tags = [j['name'] for j in album_data['album']['tags']['tag']]
@@ -121,26 +127,28 @@ def get_album_info(initial_artist,initial_album):
 initial_artist = 'Michael Jackson'
 initial_album = 'Thriller'
 
-
 #print(get_album_info(initial_artist,initial_album))
 
-stop_num = 1000
+save_file_name = 'albums_data.csv'
 
-i = len(pd.read_csv('albums_data.csv'))
+stop_num = 5000
+
+i = len(pd.read_csv(save_file_name))
 while i<stop_num:
     if i == 0:
     
-        with open('albums_data.csv','a') as csvfile:
+        with open(save_file_name,'a') as csvfile:
             writer = csv.writer(csvfile)
             print(initial_artist,initial_album)
             t=get_album_info(initial_artist,initial_album)
+#            print(t)
             writer.writerow(t)
             i+=1
         csvfile.close()
     
     else:
         try:
-            df = pd.read_csv('albums_data.csv')
+            df = pd.read_csv(save_file_name)
             scanned_albums = df['AlbumName'].tolist()
             unscanned_albums = []
             for q in df['SimilarAlbums'].tolist():
@@ -152,7 +160,7 @@ while i<stop_num:
                     pass
                 else:
                     not_original=False
-            with open('albums_data.csv','a') as csvfile:
+            with open(save_file_name,'a') as csvfile:
                 writer = csv.writer(csvfile)
                 t = get_album_info(selected_album[0],selected_album[1])
                 if len(t)>0:
