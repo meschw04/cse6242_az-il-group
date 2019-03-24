@@ -25,16 +25,16 @@ scanned_albums = df['AlbumName'].tolist()
 album_pairs = []
 
 # add nodes
-for a, b, c, d in zip(df['AlbumName'], df['Artist'], df['Tags'], df['SimilarAlbums']):
+for a, b, c, d, e in zip(df['AlbumName'], df['Artist'], df['Tags'], df['SimilarAlbums'], df['ImageLink']):
     taglist = []
     taglist += ast.literal_eval(c)
 
     if len(taglist) == 0:
-        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre="")
+        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre="", Img=e)
     elif taglist[0] != 'albums I own':
-        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre=taglist[0])
+        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre=taglist[0], Img=e)
     else:
-        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre=taglist[1])
+        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre=taglist[1], Img=e)
 
     simlist = []
     simlist += ast.literal_eval(d)
@@ -48,7 +48,31 @@ plot = Plot(plot_width=width, plot_height=height,
             x_range=Range1d(-1.1, 1.1), y_range=Range1d(-1.1, 1.1))
 plot.title.text = "Album Graph Interaction Demonstration: " + str(len(G2.node)) + " nodes"
 
-node_hover_tool = HoverTool(tooltips=[("Album Name", "@AlbumName"), ("Artist", "@Artist"), ("Genre", "@Genre")])
+tips = """
+    <div>
+        <div>
+            <img
+                src="@Img" height="168" alt="@Img" width="168"
+                style="float: left; margin: 0px 15px 15px 0px;"
+                border="2"
+            ></img>
+        </div>
+        <div>
+            <span style="font-size: 15px;">Album Name:</span>
+            <span style="font-size: 15px;">@AlbumName</span>
+        </div>
+        <div>
+            <span style="font-size: 15px;">Artist:</span>
+            <span style="font-size: 15px;">@Artist</span>
+        </div>
+        <div>
+            <span style="font-size: 15px;">Genre:</span>
+            <span style="font-size: 15px;">@Genre</span>
+        </div>
+    </div>
+"""
+
+node_hover_tool = HoverTool(tooltips=tips)
 plot.add_tools(node_hover_tool, BoxZoomTool(), ResetTool())
 
 graph_renderer = from_networkx(G2, nx.spring_layout, scale=1, center=(0, 0))
