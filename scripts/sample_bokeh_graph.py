@@ -9,31 +9,42 @@ from bokeh.models.graphs import from_networkx
 from bokeh.palettes import Spectral4
 
 
-album_csv = 'albums_data.csv'
+album_csv = 'large_test.csv'
+width = 2000
+height = 1000
+node_size = 8
+output_file_name = "interactive_graphs.html"
 
 G2 = nx.Graph()
 
-with open(album_csv) as csvfile2:
+with open(album_csv) as csvfile:
     df = pd.read_csv(album_csv)
-csvfile2.close()
-
-# add nodes
-for a, b, c in zip(df['AlbumName'], df['Artist'], df['tags']):
-    rowlist = []
-    rowlist += ast.literal_eval(c)
-    if rowlist[0] != 'albums I own':
-        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre=rowlist[0])
-    else:
-        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre=rowlist[1])
-
-# Add Edges
-with open('album_pairs.csv') as csvfile:
-    data = [tuple(line) for line in csv.reader(csvfile)]
 csvfile.close()
 
-G2.add_edges_from(data)
+scanned_albums = df['AlbumName'].tolist()
+album_pairs = []
 
-plot = Plot(plot_width=1000, plot_height=1000,
+# add nodes
+for a, b, c, d in zip(df['AlbumName'], df['Artist'], df['Tags'], df['SimilarAlbums']):
+    taglist = []
+    taglist += ast.literal_eval(c)
+
+    if len(taglist) == 0:
+        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre="")
+    elif taglist[0] != 'albums I own':
+        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre=taglist[0])
+    else:
+        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre=taglist[1])
+
+    simlist = []
+    simlist += ast.literal_eval(d)
+    for q in simlist:
+        if q[1] in scanned_albums:
+            album_pairs.append([b + "-- " + a, q[0] + "-- " + q[1]])
+
+G2.add_edges_from(album_pairs)
+
+plot = Plot(plot_width=width, plot_height=height,
             x_range=Range1d(-1.1, 1.1), y_range=Range1d(-1.1, 1.1))
 plot.title.text = "Album Graph Interaction Demonstration: " + str(len(G2.node)) + " nodes"
 
@@ -42,9 +53,9 @@ plot.add_tools(node_hover_tool, BoxZoomTool(), ResetTool())
 
 graph_renderer = from_networkx(G2, nx.spring_layout, scale=1, center=(0, 0))
 
-graph_renderer.node_renderer.glyph = Circle(size=15, fill_color=Spectral4[0])
+graph_renderer.node_renderer.glyph = Circle(size=node_size, fill_color=Spectral4[0])
 graph_renderer.edge_renderer.glyph = MultiLine(line_color="black", line_alpha=0.8, line_width=1)
 plot.renderers.append(graph_renderer)
 
-output_file("interactive_graphs.html")
+output_file(output_file_name)
 show(plot)
