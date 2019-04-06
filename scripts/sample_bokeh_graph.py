@@ -4,25 +4,37 @@ import pandas as pd
 import ast
 
 from bokeh.io import show, output_file
-from bokeh.models import Plot, Range1d, MultiLine, Circle, HoverTool, BoxZoomTool, ResetTool
+from bokeh.models import Plot, Range1d, MultiLine, Circle, HoverTool, WheelZoomTool, PanTool, ResetTool, CustomJS, TapTool
 from bokeh.models.graphs import from_networkx
 from bokeh.palettes import Spectral4
+from bokeh.models.widgets import Select
 
+# TODO: Complete this list
+# Add genre selection drop down
+# Select the first node
+# Select the second node
+# Highlight the paths between the two nodes
+# Run the VAE on the two nodes and display the new image
+# Make Tool Tip look better with some formatting
 
 album_csv = 'large_test.csv'
-width = 2000
-height = 1000
+width = 1200
+height = 600
 node_size = 8
 output_file_name = "interactive_graphs.html"
 
-G2 = nx.Graph()
+G = nx.Graph()
 
 with open(album_csv) as csvfile:
     df = pd.read_csv(album_csv)
 csvfile.close()
 
-scanned_albums = df['AlbumName'].tolist()
+df2 = pd.DataFrame()
+df2['AlbumID'] = df['Artist'] + "-- " + df['AlbumName']
+
+scanned_albums = df2['AlbumID'].tolist()
 album_pairs = []
+genre_tags = [""]
 
 # add nodes
 for a, b, c, d, e in zip(df['AlbumName'], df['Artist'], df['Tags'], df['SimilarAlbums'], df['ImageLink']):
@@ -30,23 +42,31 @@ for a, b, c, d, e in zip(df['AlbumName'], df['Artist'], df['Tags'], df['SimilarA
     taglist += ast.literal_eval(c)
 
     if len(taglist) == 0:
-        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre="", Img=e)
+        G.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre="", Img=e)
     elif taglist[0] != 'albums I own':
-        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre=taglist[0], Img=e)
+        G.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre=taglist[0], Img=e)
+        if taglist[0] not in genre_tags:
+            genre_tags.append(taglist[0])
     else:
-        G2.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre=taglist[1], Img=e)
+        G.add_node(b + "-- " + a, AlbumName=a, Artist=b, Genre=taglist[1], Img=e)
+        if taglist[0] not in genre_tags:
+            genre_tags.append(taglist[1])
 
     simlist = []
     simlist += ast.literal_eval(d)
     for q in simlist:
-        if q[1] in scanned_albums:
+        if q[0] + "-- " + q[1] in scanned_albums:
             album_pairs.append([b + "-- " + a, q[0] + "-- " + q[1]])
 
-G2.add_edges_from(album_pairs)
+with open("pair_debug.csv", "w") as f:
+    writer = csv.writer(f)
+    writer.writerows(album_pairs)
+
+G.add_edges_from(album_pairs)
 
 plot = Plot(plot_width=width, plot_height=height,
             x_range=Range1d(-1.1, 1.1), y_range=Range1d(-1.1, 1.1))
-plot.title.text = "Album Graph Interaction Demonstration: " + str(len(G2.node)) + " nodes"
+plot.title.text = "Album Graph Interaction Demonstration: " + str(len(G.node)) + " nodes"
 
 tips = """
     <div>
@@ -72,14 +92,38 @@ tips = """
     </div>
 """
 
-node_hover_tool = HoverTool(tooltips=tips)
-plot.add_tools(node_hover_tool, BoxZoomTool(), ResetTool())
+# genre = Select(title="Genre", value="All", options=genre_tags)
+# not working yet
 
-graph_renderer = from_networkx(G2, nx.spring_layout, scale=1, center=(0, 0))
+graph_renderer = from_networkx(G, nx.spring_layout, scale=1, center=(0, 0))
+
+# callback = CustomJS(args=dict(source=graph_renderer.node_renderer.data_source), code=
+#     """
+#     console.log(cb_obj)
+#     var inds = cb_data.source.selected['1d'].indices;
+#     window.alert(inds);
+#     """)
+# not working yet
+
+node_hover_tool = HoverTool(tooltips=tips)
+#node_select_tool = TapTool(callback=callback) not working
+plot.add_tools(node_hover_tool, WheelZoomTool(), PanTool(), ResetTool(), TapTool())
 
 graph_renderer.node_renderer.glyph = Circle(size=node_size, fill_color=Spectral4[0])
-graph_renderer.edge_renderer.glyph = MultiLine(line_color="black", line_alpha=0.8, line_width=1)
+graph_renderer.edge_renderer.glyph = MultiLine(line_color="black", line_alpha=0.6, line_width=1)
 plot.renderers.append(graph_renderer)
+
+
+# def select_tags():
+#     genre_val = genre.value
+#     selected = G.node
+#     if genre_val != "All":
+#         selected = selected[selected.Genre.str.contains(genre_val) == True]
+#     return selected
+#
+# def update():
+#     pass
+# not working yet
 
 output_file(output_file_name)
 show(plot)
