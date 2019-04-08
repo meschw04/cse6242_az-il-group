@@ -1,5 +1,5 @@
 import networkx as nx
-import csv
+#import csv
 import pandas as pd
 import ast
 
@@ -58,10 +58,6 @@ for a, b, c, d, e in zip(df['AlbumName'], df['Artist'], df['Tags'], df['SimilarA
         if q[0] + "-- " + q[1] in scanned_albums:
             album_pairs.append([b + "-- " + a, q[0] + "-- " + q[1]])
 
-with open("pair_debug.csv", "w") as f:
-    writer = csv.writer(f)
-    writer.writerows(album_pairs)
-
 G.add_edges_from(album_pairs)
 
 plot = Plot(plot_width=width, plot_height=height,
@@ -97,17 +93,17 @@ tips = """
 
 graph_renderer = from_networkx(G, nx.spring_layout, scale=1, center=(0, 0))
 
-# callback = CustomJS(args=dict(source=graph_renderer.node_renderer.data_source), code=
-#     """
-#     console.log(cb_obj)
-#     var inds = cb_data.source.selected['1d'].indices;
-#     window.alert(inds);
-#     """)
-# not working yet
+callback = CustomJS(args=dict(source=graph_renderer.node_renderer.data_source), code=
+    """
+    console.log(cb_data.source)
+    var inds = cb_data.source.selected['1d'].indices;
+    var artist = cb_data.source.data.Img[inds]
+    window.alert(artist);
+    """)
 
 node_hover_tool = HoverTool(tooltips=tips)
-#node_select_tool = TapTool(callback=callback) not working
-plot.add_tools(node_hover_tool, WheelZoomTool(), PanTool(), ResetTool(), TapTool())
+node_select_tool = TapTool(callback=callback)
+plot.add_tools(node_hover_tool, WheelZoomTool(), PanTool(), ResetTool(), node_select_tool)
 
 graph_renderer.node_renderer.glyph = Circle(size=node_size, fill_color=Spectral4[0])
 graph_renderer.edge_renderer.glyph = MultiLine(line_color="black", line_alpha=0.6, line_width=1)
