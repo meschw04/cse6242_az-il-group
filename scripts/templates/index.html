@@ -70,17 +70,26 @@ body {font-family: Arial;}
   <h3>Dashboard</h3>
   <p>Please enter the below information to view graph</p>
     <form action = "/" method = "POST">
-           <div style="width:1500px"><input type="text" name="artist" placeholder="Enter artist name" value="{{request.form.artist}}"/></div>
-		   <div style="width:1500px"><input type="text" name="album" placeholder="Enter album name" value="{{request.form.album}}"/></div>
-		   <div style="width:1500px"><input type="text" name="numnodes" placeholder="Enter number of nodes" value="{{request.form.numnodes}}"/></div>
+           <div style="width:1500px"><input id="artist" type="text" name="artist" placeholder="Enter artist name" value="{{request.form.artist}}"/></div>
+		   <div style="width:1500px"><input id="album" type="text" name="album" placeholder="Enter album name" value="{{request.form.album}}"/></div>
+		   <div style="width:1500px"><input id="numnodes" type="text" name="numnodes" placeholder="Enter number of nodes" value="{{request.form.numnodes}}"/></div>
               <div style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
-                <input class="button primary" type = "submit" value="Run"/>
+                <input class="button primary" type = "button" value="Run" onclick="update_graph(document.getElementById('artist').value, document.getElementById('album').value, document.getElementById('numnodes').value)"/>
               </div>
               </form>
 </div>
 
 <script>
-function update_graph(){debugger;}
+	function update_graph(artist, album, numnodes){
+		$.post( 
+			"http://127.0.0.1:5000/", 
+			{ artist: artist, album: album, numnodes: numnodes},
+			function(response) { 				
+				$("#bokeh_script").html(response["script"]); 
+				$("#bokeh_div").html(response["div"]);
+			}
+		);
+	}
 </script>
 
 <div id="VAE" class="tabcontent">
@@ -117,8 +126,8 @@ document.getElementById("defaultOpen").click();
 });
    </script>
 
-{{ script|safe }}
-{{ div|safe }}
+<script id="bokeh_script"></script>
+<div id="bokeh_div"></div>
 
 <div style="width:500px;margin-left: 460px;margin-top: 300px;justify-content: center;"></div>   
 
