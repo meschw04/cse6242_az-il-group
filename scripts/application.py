@@ -1,10 +1,6 @@
 from flask import *
 import album_bokeh
 from bokeh.embed import components
-import networkx as nx
-import json
-
-import os
 
 
 UPLOAD_FOLDER = '../static'
@@ -21,8 +17,8 @@ def main():
         if request.form['album'] == "":
             node1 = int(request.form['node1'])
             node2 = int(request.form['node2'])
-            node_list = list(G.nodes.keys())
             return "success"
+            # node_list = list(G.nodes.keys())
             # if node2 != -1:
             #     shortest_path = nx.all_pairs_shortest_path(G, node_list[node1], node_list[node2])
             #     path = []
@@ -45,13 +41,12 @@ def main():
             else:
                 album_id = request.form['artist'] + " - " + request.form['album']
                 df_limit = int(request.form['numnodes'])
-                plot, G = album_bokeh.main(seed_album_id=album_id, df_limit=df_limit)
+                plot = album_bokeh.main(seed_album_id=album_id, df_limit=df_limit)
                 script, div = components(plot)
-                return render_template("index.html", script=script, div=div)
+                return jsonify({"script": script, "div": div})
 
     return render_template('index.html', script=blank_script, div=blank_div, error=error)
 
 
 if __name__ == '__main__':
-    G = nx.Graph()
     app.run(debug=True)

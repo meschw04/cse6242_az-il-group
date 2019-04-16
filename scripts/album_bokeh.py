@@ -1,44 +1,14 @@
-
 import networkx as nx
 import pandas as pd
 import ast
 import random
-import json
-# import collections as cl
 
 from bokeh.io import show, output_file
 from bokeh.models import Plot, Range1d, MultiLine, Circle, HoverTool, WheelZoomTool, PanTool, ResetTool, CustomJS, \
     TapTool
 from bokeh.models.graphs import from_networkx
-from bokeh.palettes import Spectral4
 from bokeh.models.widgets import Select
 from bokeh.layouts import layout, column
-from bokeh.io import curdoc
-
-
-'''
-(done)		Using other file, build a connected graph from an input node
-
-(doneish)	Hover window format
-
-		Better graph layout?
-
-		Assign node colors accordign to genre
-
-		Allow building a graph by genre from the smaller dataset
-
-(done)		Have user specified node in red
-
-(still needed?)	Cut off text fields after a certain length to guarantee formatting
-
-		Create a list of acceptable genres (tags)
-
-(done?)		Add a "recenter" option that recreates the bokeh figure using a new node as the seed
-
-(done)		Limit number of similar albums to 5 when generating network
-
-'''
-
 
 def get_idxs(df, seed_album_id, node_sim_limit, df_limit):
     # This function returns rows from dataframe
@@ -127,7 +97,7 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
         # Extract necessary values from row
         album_id = row['album_id']
-        node_color = "yellow" if album_id == seed_album_id else "LightSkyBlue"  # Spectral4[0]
+        node_color = "yellow" if album_id == seed_album_id else "LightSkyBlue"
         album_name = row['album_name']
         artist = row['artist']
         tags = ast.literal_eval(row['tags'])
@@ -190,6 +160,7 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
     callback = CustomJS(args=dict(source=graph_renderer.node_renderer.data_source), code=
     """
+    debugger;
     if (window.count == null) {
         window.count = 0
         window.node1 = [-1]
@@ -197,20 +168,36 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
         window.node1_URL = ""
         window.node2_URL = ""
     }
-    debugger;
+    if (window.genre_val == null) {window.genre_val = "no tags"}
+    
     window.count = window.count + 1
     var inds = cb_data.source.selected['1d'].indices;
     cb_data.source.data.node_color[inds] = "green"
     if (window.count % 2 == 1){
-        if (window.node1 == 0) {
-            cb_data.source.data.node_color[window.node1] = "yellow"
-        } else {cb_data.source.data.node_color[window.node1] = "LightSkyBlue"}
+    
+        if (window.node1 < 0) { var tags = [];} 
+        else { var tags = source.data.genre[window.node1]};
+        
+        if (tags.includes(window.genre_val)) {
+            source.data.node_color[window.node1] = "purple";
+        } else {
+            if (window.node1 == 0) {
+                cb_data.source.data.node_color[window.node1] = "yellow"
+            } else {cb_data.source.data.node_color[window.node1] = "LightSkyBlue"}
+        }
         window.node1 = inds
         window.node1_URL = cb_data.source.data.img[inds]
     } else {
-        if (window.node2 == 0) {
-            cb_data.source.data.node_color[window.node2] = "yellow"
-        } else {cb_data.source.data.node_color[window.node2] = "LightSkyBlue"}
+        if (window.node2 < 0) { var tags = [];} 
+        else { var tags = source.data.genre[window.node2]};
+        
+        if (tags.includes(window.genre_val)) {
+            source.data.node_color[window.node2] = "purple";
+        } else {
+            if (window.node2 == 0) {
+                cb_data.source.data.node_color[window.node2] = "yellow"
+            } else {cb_data.source.data.node_color[window.node2] = "LightSkyBlue"}
+        }
         window.node2 = inds
         window.node2_URL = cb_data.source.data.img[inds]
     }
@@ -225,8 +212,9 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
     callback2 = CustomJS(args=dict(source=graph_renderer.node_renderer.data_source, length=G.number_of_nodes()), code=
     """
-    debugger;
     var val = cb_obj.value
+    window.genre_val = val
+    debugger;
     var i;
     for (i = 0; i < length; i++) { 
         if (source.data.node_color[i] != "green"){
@@ -259,7 +247,7 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
     if show_fig:
         show(l)
-    return l, G
+    return l
 
 
 def main(seed_album_id='Michael Jackson' + ' - ' + 'Thriller', df_limit=50):
@@ -273,10 +261,10 @@ def main(seed_album_id='Michael Jackson' + ' - ' + 'Thriller', df_limit=50):
     show_fig = False
 
     # Generate graph
-    plot, G = generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, height, node_size, output_file_name,
+    plot = generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, height, node_size, output_file_name,
         show_fig)
 
-    return plot, G
+    return plot
 
 
 if __name__ == '__main__':
