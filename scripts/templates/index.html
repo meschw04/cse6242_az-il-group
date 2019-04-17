@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Expires" CONTENT="-1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-1.0.4.min.css" type="text/css" />
 <link
     href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.css"
@@ -84,11 +87,13 @@ body {font-family: Arial;}
 		$.post( 
 			"http://127.0.0.1:5000/", 
 			{ artist: artist, album: album, numnodes: numnodes},
-			function(response) { 				
+			function(response) {
 				$("#bokeh_script").html(response["script"]); 
 				$("#bokeh_div").html(response["div"]);
 			}
 		);
+		$("#ae_button").load("./static/ae_button_empty.txt");
+		$("#ae_div").load("./static/ae_output_empty.txt");
 	}
 </script>
 
@@ -129,24 +134,21 @@ document.getElementById("defaultOpen").click();
 <script id="bokeh_script"></script>
 <div id="bokeh_div"></div>
 
-<div style="width:500px;margin-left: 460px;margin-top: 300px;justify-content: center;"></div>
-
 <div id="ae_button" style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
-    <input class="button primary" type = "button" value="Run Autoencoder" onclick="run_ae()"/>
 </div>
               
 <script>
 function run_ae() {
-	debugger;
 	$.post( 
 			"http://127.0.0.1:5000/", 
-			{ node1_URL: this.node1_URL, node2_URL: this.node2_URL, album: "run_ae"}
+			{ node1_URL: this.node1_URL, node2_URL: this.node2_URL, album: "run_ae"},
+			function(){load_output()}
 		);
 }
-
+function load_output(){$("#ae_div").load("./static/ae_output.txt");}
 </script>
 
-<div id="ae_div"> <img src="./static/img/ae_output.png"/></img> </div> 
+<div id="ae_div"></div> 
 
 <div style="width:500px;margin-left: 460px;margin-top: 300px; justify-content: center;"></div>   
 
