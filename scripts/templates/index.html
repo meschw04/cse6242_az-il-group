@@ -75,8 +75,8 @@ body {font-family: Arial;}
     <form action = "/" method = "POST">
            <div style="width:1500px"><input id="artist" type="text" name="artist" placeholder="Enter artist name" value="{{request.form.artist}}"/></div>
 		   <div style="width:1500px"><input id="album" type="text" name="album" placeholder="Enter album name" value="{{request.form.album}}"/></div>
-		   <div style="width:1500px"><input id="numnodes" type="text" name="numnodes" placeholder="Enter number of nodes" value="{{request.form.numnodes}}"/></div>
-              <div style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
+		   <div style="width:1500px"><input id="numnodes" type="text" name="numnodes" placeholder="Enter # of nodes (limit 500)" value="{{request.form.numnodes}}"/></div>
+              <div style="width:500px;margin-left: 40px;margin-top: 10px;justify-content: left;">
                 <input class="button primary" type = "button" value="Run" onclick="update_graph(document.getElementById('artist').value, document.getElementById('album').value, document.getElementById('numnodes').value)"/>
               </div>
               </form>
@@ -84,6 +84,7 @@ body {font-family: Arial;}
 
 <script>
 	function update_graph(artist, album, numnodes){
+		this.count = 0;
 		$.post( 
 			"http://127.0.0.1:5000/", 
 			{ artist: artist, album: album, numnodes: numnodes},
@@ -134,7 +135,7 @@ document.getElementById("defaultOpen").click();
 <script id="bokeh_script"></script>
 <div id="bokeh_div"></div>
 
-<div id="ae_button" style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
+<div id="ae_button">
 </div>
               
 <script>
@@ -144,8 +145,8 @@ function run_ae() {
 			{ node1_URL: this.node1_URL, node2_URL: this.node2_URL, album: "run_ae"},
 			function(){load_output()}
 		);
-}
-function load_output(){$("#ae_div").load("./static/ae_output.txt");}
+	}
+	function load_output(){$("#ae_div").load("./static/ae_output.txt");}
 </script>
 
 <div id="ae_div"></div> 
