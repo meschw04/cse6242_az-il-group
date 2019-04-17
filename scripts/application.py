@@ -1,5 +1,6 @@
 from flask import *
 import album_bokeh
+import run_autoencoder
 from bokeh.embed import components
 
 
@@ -14,6 +15,11 @@ def main():
     blank_script = """<script type="text/javascript"></script>"""
     blank_div = """<div></div>"""
     if request.method == 'POST':
+        if request.form['album'] == "run_ae":
+            node1_URL = request.form['node1_URL']
+            node2_URL = request.form['node2_URL']
+            run_autoencoder.run_autoencoder(node1_URL, node2_URL)
+            return "success"
         if request.form['album'] == "":
             node1 = int(request.form['node1'])
             node2 = int(request.form['node2'])
@@ -28,22 +34,18 @@ def main():
             # else:
             #     return json.dumps([])
 
-        if request.form['album'] not in ['Layla', 'Trains', 'Thriller', 'Trouble Will Find Me']:
-            error = 'Sorry, we do not have that album right now'
-
+        if request.form['album'] == 'Trains':
+            result = "https://www.youtube.com/watch?v=0UHwkfhwjsk"
+            return render_template('album.html', result=result)
+        elif request.form['album'] == 'Layla':
+            result = "https://www.youtube.com/watch?v=fX5USg8_1gA"
+            return render_template('album.html', result=result)
         else:
-            if request.form['album'] == 'Trains':
-                result = "https://www.youtube.com/watch?v=0UHwkfhwjsk"
-                return render_template('album.html', result=result)
-            elif request.form['album'] == 'Layla':
-                result = "https://www.youtube.com/watch?v=fX5USg8_1gA"
-                return render_template('album.html', result=result)
-            else:
-                album_id = request.form['artist'] + " - " + request.form['album']
-                df_limit = int(request.form['numnodes'])
-                plot = album_bokeh.main(seed_album_id=album_id, df_limit=df_limit)
-                script, div = components(plot)
-                return jsonify({"script": script, "div": div})
+            album_id = request.form['artist'] + " - " + request.form['album']
+            df_limit = int(request.form['numnodes'])
+            plot = album_bokeh.main(seed_album_id=album_id, df_limit=df_limit)
+            script, div = components(plot)
+            return jsonify({"script": script, "div": div})
 
     return render_template('index.html', script=blank_script, div=blank_div, error=error)
 

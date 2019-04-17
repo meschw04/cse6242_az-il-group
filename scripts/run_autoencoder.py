@@ -36,6 +36,7 @@ def run_autoencoder(url1, url2):
        interp_01 = np.array(enc1)+interp_space[i]*(np.array(enc2)-np.array(enc1))
     
        out_interp_01 = load_decoder.predict(interp_01)
+       #print(out_interp_01.tolist())
        if i<5:
            axarr[0,i%5+1].imshow(cv2.cvtColor(np.uint8(out_interp_01[0]*255), cv2.COLOR_BGR2RGB))
        else:
@@ -43,11 +44,11 @@ def run_autoencoder(url1, url2):
     
     axarr[1,4].imshow(cv2.cvtColor(np.uint8(test2), cv2.COLOR_BGR2RGB))
     axarr[1,5].set_axis_off()
-    plt.savefig("out_img.png")
+    plt.savefig("./static/img/ae_output.png")
     os.remove('url1.png')
     os.remove('url2.png')
     plt.clf()
-    print('Image Saved at '+str(os.getcwd())+'/out_img.png')
+    print('Image Saved at '+str(os.getcwd())+'./static/img/ae_output.png')
 
 run_autoencoder("https://lastfm-img2.akamaized.net/i/u/300x300/6df20949c1cf44edc451581e314f064e.png",\
                 "https://lastfm-img2.akamaized.net/i/u/300x300/9f9c4d5ee17a4762c79c26886e320727.png")
