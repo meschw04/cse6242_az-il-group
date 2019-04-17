@@ -1,26 +1,35 @@
+from keras import backend as K
 from keras.models import load_model
 import matplotlib.pyplot as plt
 import sys
 try:
-    sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
+    #sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
     import cv2
 except:
     pass
 import numpy as np
 import urllib
 import os
-global load_encoder
-global load_decoder
-load_encoder = load_model('records_auto-enc_v1.h5')
-load_decoder = load_model('records_auto-dec_v1.h5')
+
+def import_models():
+    try:
+        del load_encoder
+        del load_decoder
+        load_encoder = load_model('records_auto-enc_v1.h5')
+        load_decoder = load_model('records_auto-dec_v1.h5')
+        return load_encoder, load_decoder
+    except:
+        load_encoder = load_model('records_auto-enc_v1.h5')
+        load_decoder = load_model('records_auto-dec_v1.h5')
+        return load_encoder, load_decoder
 
 
 def run_autoencoder(url1, url2):
     #load_encoder = load_model('records_auto-enc_v1.h5')
     #load_decoder = load_model('records_auto-dec_v1.h5')
     #ae = load_model('records_ae_v1.h5')
-    #load_encoder, load_decoder = import_models()
-    #pic1 = urllib.request.urlopen(url1).read()
+    load_encoder, load_decoder = import_models()
+    pic1 = urllib.request.urlopen(url1).read()
     filename1 = 'url1.png'
     with open(filename1,'wb') as f:
         f.write(pic1)
@@ -58,6 +67,7 @@ def run_autoencoder(url1, url2):
     os.remove('url1.png')
     os.remove('url2.png')
     plt.clf()
+    K.clear_session()
     print('Image Saved at '+str(os.getcwd())+'./static/img/ae_output.png')
 
 #Example:

@@ -12,6 +12,14 @@
 <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-1.0.4.min.js"></script>
 <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+<link href="../static/css/bootstrap-tabs-x-bs4.css" media="all" rel="stylesheet" type="text/css" /&gt;>
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="../static/js/bootstrap-tabs-x.js" type="text/javascript"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+ <link rel="icon" href="http://example.com/favicon.png">
         <script type="text/javascript">
             Bokeh.set_log_level("info");
         </script>
@@ -49,42 +57,86 @@ body {font-family: Arial;}
   border: 1px solid #ccc;
   border-top: none;
 }
+.button1{ 
+ font-size: 14px;
+ font-family:times;
+ background:#0B3861;
+ color:#FBF5EF; 
+ padding: 15px 20px;
+ border: 2px solid ;
+ border-radius: 8px;
+  }
+.button1:hover {
+ box-shadow: 0 8px 15px 0 rgba(0,0,0,0.3), 0 5px 21px 0 rgba(0,0,0,0.18);
+}
+h2 {
+    font-size: 1.5em;
+    margin: 10px;
+    padding: 10px;
+    font-family:times;
+    text-align: center;
+}
+h3 {
+    font-size: 1em;
+    background-color: none;
+    margin: 10px;
+    
+    font-family:times;
+    text-align: center;
+}
+.tab-content { 
+  background-color: #FAFAFA;
+}
+@media only screen and (max-width: 479px){
+    .tab .nav-tabs li{
+        width: 100%;
+        text-align: center;
+        margin-bottom: 5px;
+    }
 </style>
 </head>
 <body>
 
 <h2>An Interactive Autoencoder for Album Covers
 </h2>
-<p>Stuart Colianni, Amanpreet Kaur, Jay Pranger, Marcus Schwarting</p>
+<h3><i>Stuart Colianni, Amanpreet Kaur, Jay Pranger, Marcus Schwarting</i></h3>
 
-<div class="tab">
-  <button class="tablinks" onclick="openTab(event, 'About')" id="defaultOpen">About</button>
-  <button class="tablinks" onclick="openTab(event, 'Dashboard')">Dashboard</button>
-  <button class="tablinks" onclick="openTab(event, 'VAE')">Build your own album cover</button>
-</div>
+<div class="tabs-x align-center tabs-above tab-bordered">
+  <!-- tabs -->
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+     <li class="nav-item" >
 
-<div id="About" class="tabcontent">
-  <h3>About</h3>
-  <p>Album art is an important part of the music streaming experience since it is prominently featured on a listener’s applications while streaming. However research related to streaming services has focused on user behavior, social networks, and music recommendations [1,2] while album art has been under-represented. Our project offers a tool for users to visually explore their favorite album art using similarity graphs and to create their own covers using a variational autoencoder (VAE).
-</p>
-</div>
-
-<div id="Dashboard" class="tabcontent">
-  <h3>Dashboard</h3>
-  <p>Please enter the below information to view graph</p>
+          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-expanded="true"><i class="fa fa-group"></i>About</a>
+     </li>
+     <li class="nav-item">
+          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"><i class="fa fa-area-chart"></i>Dashboard</a>
+     </li>
+     <li class="nav-item">
+          <a class="nav-link" id="summary-tab" data-toggle="tab" href="#summary" role="tab" aria-controls="summary"><i class="fa fa-line-chart"></i>Data summary</a>
+     </li>
+  </ul>
+  <!-- tab panes -->
+  <div class="tab-content" id="myTabContent">
+     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab" ><p >Album art is an important part of the music streaming experience since it is prominently featured on a listener’s applications while streaming. However research related to streaming services has focused on user behavior, social networks, and music recommendations while album art has been under-represented. Our project offers a tool for users to visually explore their favorite album art using similarity graphs and to create their own covers using a variational autoencoder (VAE).
+     Users will be able to explore a graph network of albums in a dataset connected through Last.FM, a popular database used by applications like Pandora and Spotify. Individual genres can then be chosen and explored further.
+     Using a set of input albums, the variational auto-encoder will generate a composite album cover. As such, the desired functionality is twofold.  First, users will be able to visually explore music, and better understand the similarity relationships between albums and musical genres. Secondly, users will be able to generate interesting cover art based on album selections.
+</p></div>
+     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+    <p>Please enter the below information to view graph</p>
     <form action = "/" method = "POST">
-           <div style="width:1500px"><input id="artist" type="text" name="artist" placeholder="Enter artist name" value="{{request.form.artist}}"/></div>
-		   <div style="width:1500px"><input id="album" type="text" name="album" placeholder="Enter album name" value="{{request.form.album}}"/></div>
-		   <div style="width:1500px"><input id="numnodes" type="text" name="numnodes" placeholder="Enter # of nodes (limit 500)" value="{{request.form.numnodes}}"/></div>
-              <div style="width:500px;margin-left: 40px;margin-top: 10px;justify-content: left;">
-                <input class="button primary" type = "button" value="Run" onclick="update_graph(document.getElementById('artist').value, document.getElementById('album').value, document.getElementById('numnodes').value)"/>
+           <div style="width:2000px"><input id="artist" type="text" name="artist" placeholder="Enter artist name" value="{{request.form.artist}}"/><p style="font-size: 0.7em;">*Examples of artist names:Michael Jackson, Eric Clapton, Bob Dylan etc.</p></div>
+       <div style="width:2000px"><input id="album" type="text" name="album" placeholder="Enter album name" value="{{request.form.album}}"/><p style="font-size: 0.7em;">*Examples of album names:Thriller,From the Cradle,Dylan etc.</p></div>
+       <div style="width:2000px"><input id="numnodes" type="text" name="numnodes" placeholder="Enter number of nodes" value="{{request.form.numnodes}}"/><p style="font-size: 0.7em;">*Please note: This is the maximum number of nodes to visualize. Some albums may have fewer similar albums than the number specified.</p></div>
+              <div style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
+                <input class="button1" type = "button" value="Create visualization" onclick="update_graph(document.getElementById('artist').value, document.getElementById('album').value, document.getElementById('numnodes').value)"/>
               </div>
               </form>
+  </div>
+   <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab" ><p >To do: Add histograms</p></div>
 </div>
 
 <script>
 	function update_graph(artist, album, numnodes){
-		this.count = 0;
 		$.post( 
 			"http://127.0.0.1:5000/", 
 			{ artist: artist, album: album, numnodes: numnodes},
@@ -135,18 +187,20 @@ document.getElementById("defaultOpen").click();
 <script id="bokeh_script"></script>
 <div id="bokeh_div"></div>
 
-<div id="ae_button">
+<div id="ae_button" style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
 </div>
               
 <script>
 function run_ae() {
+  $("#ae_div").load("./static/ae_output_empty.txt");
 	$.post( 
 			"http://127.0.0.1:5000/", 
 			{ node1_URL: this.node1_URL, node2_URL: this.node2_URL, album: "run_ae"},
 			function(){load_output()}
 		);
-	}
-	function load_output(){$("#ae_div").load("./static/ae_output.txt");}
+}
+function load_output(){$("#ae_div").load("./static/ae_output.txt");}
+document.getElementById("ae_div").innerHTML = "";
 </script>
 
 <div id="ae_div"></div> 
