@@ -1,15 +1,33 @@
 from keras.models import load_model
 import matplotlib.pyplot as plt
-import cv2
+import sys
+try:
+    sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
+    import cv2
+except:
+    pass
 import numpy as np
 import urllib
 import os
 
-def run_autoencoder(url1, url2):
-    load_encoder = load_model('records_auto-enc_v1.h5')
-    load_decoder = load_model('records_auto-dec_v1.h5')
-    #ae = load_model('records_ae_v1.h5')
+def import_models():
+    try:
+	del load_encoder
+	del load_decoder
+	load_encoder = load_model('records_auto-enc_v1.h5')
+	load_decoder = load_model('records_auto-dec_v1.h5')
+        return load_encoder, load_decoder
+    except:
+        load_encoder = load_model('records_auto-enc_v1.h5')
+	load_decoder = load_model('records_auto-dec_v1.h5')
+        return load_encoder, load_decoder
 
+
+def run_autoencoder(url1, url2):
+    #load_encoder = load_model('records_auto-enc_v1.h5')
+    #load_decoder = load_model('records_auto-dec_v1.h5')
+    #ae = load_model('records_ae_v1.h5')
+    load_encoder, load_decoder = import_models()
     pic1 = urllib.request.urlopen(url1).read()
     filename1 = 'url1.png'
     with open(filename1,'wb') as f:
@@ -50,5 +68,6 @@ def run_autoencoder(url1, url2):
     plt.clf()
     print('Image Saved at '+str(os.getcwd())+'./static/img/ae_output.png')
 
-run_autoencoder("https://lastfm-img2.akamaized.net/i/u/300x300/6df20949c1cf44edc451581e314f064e.png",\
-                "https://lastfm-img2.akamaized.net/i/u/300x300/9f9c4d5ee17a4762c79c26886e320727.png")
+#Example:
+#run_autoencoder("https://lastfm-img2.akamaized.net/i/u/300x300/6df20949c1cf44edc451581e314f064e.png",\
+#                "https://lastfm-img2.akamaized.net/i/u/300x300/9f9c4d5ee17a4762c79c26886e320727.png")
