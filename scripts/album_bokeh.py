@@ -91,8 +91,6 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
     G = nx.Graph()
     scanned_album_ids = df['album_id'].tolist()
 
-    genre_list = set()
-
     for index, row in df.iterrows():
 
         # Extract necessary values from row
@@ -106,9 +104,6 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
         # Add nodes to graph
         tags = [t.capitalize() for t in tags if t.lower() not in ['albums i own', artist.lower()]]
-
-        for t in tags:
-            genre_list.add(t)
 
         if len(tags) == 0:
             genre = 'N/A'
@@ -132,7 +127,7 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
     graph_renderer.edge_renderer.glyph = MultiLine(line_color="black", line_alpha=0.6, line_width=1)
 
     plot = Plot(plot_width=width, plot_height=height, x_range=Range1d(-1.1, 1.1), y_range=Range1d(-1.1, 1.1))
-    plot.title.text = 'Album Graph Interaction Demonstration: {} nodes'.format(len(G.node))
+    plot.title.text = 'Album Graph Interactive Demonstration: {} nodes'.format(len(G.node))
     tips = """
 	    <div id="header" style="width:220px;">
 		<div>
@@ -160,13 +155,13 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
     callback = CustomJS(args=dict(source=graph_renderer.node_renderer.data_source), code=
     """
-    if (window.count == null) {
-        window.count = 0
+    if (window.count == 0) {
         window.node1 = [-1]
         window.node2 = [-1]
         window.node1_URL = ""
         window.node2_URL = ""
     }
+    
     if (window.genre_val == null) {window.genre_val = "no tags"}
     
     window.count = window.count + 1
@@ -225,8 +220,9 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
         }
     }
     """)
-    genre_list = list(genre_list)
-    genre_list.sort()
+    col_name = ["genres"]
+    data = pd.read_csv('acceptable_genres.csv', names=col_name)
+    genre_list = data.genres.tolist()
     genre = Select(title="Genre", value="All", options=genre_list, callback=callback2)
 
     plot.add_tools(node_hover_tool, WheelZoomTool(), PanTool(), ResetTool(), node_select_tool)
@@ -249,7 +245,11 @@ def main(seed_album_id='Michael Jackson' + ' - ' + 'Thriller', df_limit=50):
     # Define key variables
     album_csv = 'large_test.csv'
     node_sim_limit = 5
+    if df_limit > 500:
+        df_limit = 500
     node_size = 15
+    if df_limit > 200:
+        node_size = 10
     width = 1200
     height = 600
     output_file_name = 'interactive_graphs.html'
