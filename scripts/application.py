@@ -8,6 +8,7 @@ UPLOAD_FOLDER = '../static'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__,template_folder="templates")
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
@@ -20,26 +21,7 @@ def main():
             node2_URL = request.form['node2_URL']
             run_autoencoder.run_autoencoder(node1_URL, node2_URL)
             return "success"
-        if request.form['album'] == "":
-            node1 = int(request.form['node1'])
-            node2 = int(request.form['node2'])
-            return "success"
-            # node_list = list(G.nodes.keys())
-            # if node2 != -1:
-            #     shortest_path = nx.all_pairs_shortest_path(G, node_list[node1], node_list[node2])
-            #     path = []
-            #     for edge in shortest_path:
-            #         path.append(G.edges.index(edge))
-            #     return json.dumps(path)
-            # else:
-            #     return json.dumps([])
 
-        if request.form['album'] == 'Trains':
-            result = "https://www.youtube.com/watch?v=0UHwkfhwjsk"
-            return render_template('album.html', result=result)
-        elif request.form['album'] == 'Layla':
-            result = "https://www.youtube.com/watch?v=fX5USg8_1gA"
-            return render_template('album.html', result=result)
         else:
             album_id = request.form['artist'] + " - " + request.form['album']
             df_limit = int(request.form['numnodes'])
@@ -49,6 +31,12 @@ def main():
 
     return render_template('index.html', script=blank_script, div=blank_div, error=error)
 
+@app.after_request
+def add_header(response):
+    # response.cache_control.no_store = True
+    if 'Cache-Control' not in response.headers:
+        response.headers['Cache-Control'] = 'no-store'
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -160,7 +160,6 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
     callback = CustomJS(args=dict(source=graph_renderer.node_renderer.data_source), code=
     """
-    debugger;
     if (window.count == null) {
         window.count = 0
         window.node1 = [-1]
@@ -185,8 +184,8 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
                 cb_data.source.data.node_color[window.node1] = "yellow"
             } else {cb_data.source.data.node_color[window.node1] = "LightSkyBlue"}
         }
-        window.node1 = inds
-        window.node1_URL = cb_data.source.data.img[inds]
+        window.node1 = inds;
+        window.node1_URL = cb_data.source.data.img[inds];
     } else {
         if (window.node2 < 0) { var tags = [];} 
         else { var tags = source.data.genre[window.node2]};
@@ -198,13 +197,10 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
                 cb_data.source.data.node_color[window.node2] = "yellow"
             } else {cb_data.source.data.node_color[window.node2] = "LightSkyBlue"}
         }
-        window.node2 = inds
-        window.node2_URL = cb_data.source.data.img[inds]
+        window.node2 = inds;
+        window.node2_URL = cb_data.source.data.img[inds];
+        $("#ae_button").load("./static/ae_button.txt");
     }
-    $.post( 
-        "http://127.0.0.1:5000/", 
-        { node1: window.node1[0], node2: window.node2[0], album: "" }
-    );
     """)
     # , function (data) {var obj = JSON.parse(data); debugger;}
     # add above back in to $.Post to receive data from flask
@@ -214,7 +210,6 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
     """
     var val = cb_obj.value
     window.genre_val = val
-    debugger;
     var i;
     for (i = 0; i < length; i++) { 
         if (source.data.node_color[i] != "green"){
