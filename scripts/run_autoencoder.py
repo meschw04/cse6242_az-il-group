@@ -9,26 +9,18 @@ except:
 import numpy as np
 import urllib
 import os
-
-def import_models():
-    try:
-	del load_encoder
-	del load_decoder
-	load_encoder = load_model('records_auto-enc_v1.h5')
-	load_decoder = load_model('records_auto-dec_v1.h5')
-        return load_encoder, load_decoder
-    except:
-        load_encoder = load_model('records_auto-enc_v1.h5')
-	load_decoder = load_model('records_auto-dec_v1.h5')
-        return load_encoder, load_decoder
+global load_encoder
+global load_decoder
+load_encoder = load_model('records_auto-enc_v1.h5')
+load_decoder = load_model('records_auto-dec_v1.h5')
 
 
 def run_autoencoder(url1, url2):
     #load_encoder = load_model('records_auto-enc_v1.h5')
     #load_decoder = load_model('records_auto-dec_v1.h5')
     #ae = load_model('records_ae_v1.h5')
-    load_encoder, load_decoder = import_models()
-    pic1 = urllib.request.urlopen(url1).read()
+    #load_encoder, load_decoder = import_models()
+    #pic1 = urllib.request.urlopen(url1).read()
     filename1 = 'url1.png'
     with open(filename1,'wb') as f:
         f.write(pic1)
