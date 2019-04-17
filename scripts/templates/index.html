@@ -129,7 +129,26 @@ document.getElementById("defaultOpen").click();
 <script id="bokeh_script"></script>
 <div id="bokeh_div"></div>
 
-<div style="width:500px;margin-left: 460px;margin-top: 300px;justify-content: center;"></div>   
+<div style="width:500px;margin-left: 460px;margin-top: 300px;justify-content: center;"></div>
+
+<div id="ae_button" style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
+    <input class="button primary" type = "button" value="Run Autoencoder" onclick="run_ae()"/>
+</div>
+              
+<script>
+function run_ae() {
+	debugger;
+	$.post( 
+			"http://127.0.0.1:5000/", 
+			{ node1_URL: this.node1_URL, node2_URL: this.node2_URL, album: "run_ae"}
+		);
+}
+
+</script>
+
+<div id="ae_div"> <img src="./static/img/ae_output.png"/></img> </div> 
+
+<div style="width:500px;margin-left: 460px;margin-top: 300px; justify-content: center;"></div>   
 
 <?php
     $var = $_GET['result'];
