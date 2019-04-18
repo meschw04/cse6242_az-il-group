@@ -65,7 +65,7 @@ def run_autoencoder(url1, url2):
     
     axarr[1,4].imshow(cv2.cvtColor(np.uint8(test2), cv2.COLOR_BGR2RGB))
     axarr[1,5].set_axis_off()
-    fname = "./static/img/ae_output"+str(datetime.now()).replace(" ","-")+".png"
+    fname = "./static/img/ae_output"+str(datetime.now()).replace(" ","-").replace(":","-")+".png"
     plt.savefig(fname)
     with open("./static/ae_output.txt","w") as f:
         f.write('<div id="ae_div"> <img src="'+fname+'"/></img> </div>')
