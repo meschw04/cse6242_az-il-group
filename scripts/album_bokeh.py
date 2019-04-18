@@ -7,6 +7,7 @@ import ast
 import pickle
 import collections as cl
 import matplotlib
+
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
@@ -18,59 +19,59 @@ from bokeh.models.graphs import from_networkx
 from bokeh.models.widgets import Select
 from bokeh.layouts import layout, column
 
+
 def plot_bar_chart(query_tags):
+    # Define key variables
+    parsed_tags_dict_file = 'dataset_tags_dict_after_parsing.p'
+    all_tags = ['rock', 'indie', 'electronic', 'pop', 'alternative', 'indie rock', 'metal',
+                'alternative rock', 'female vocalists', 'classic rock', 'folk', '80s',
+                '90s', 'hard rock', 'Hip-Hop', 'soul', 'jazz', 'experimental',
+                'singer-songwriter', 'ambient'][::-1]
+    bar_width = 0.3
+    opacity = 1.0
+    save_file = 'genre_bar_chart.png'
 
-	# Define key variables
-	parsed_tags_dict_file = 'dataset_tags_dict_after_parsing.p'
-	all_tags = ['rock', 'indie', 'electronic', 'pop', 'alternative', 'indie rock', 'metal', 
-			'alternative rock', 'female vocalists', 'classic rock', 'folk', '80s', 
-			'90s', 'hard rock', 'Hip-Hop', 'soul', 'jazz', 'experimental', 
-			'singer-songwriter', 'ambient'][::-1]
-	bar_width = 0.3
-	opacity = 1.0
-	save_file = 'genre_bar_chart.png'
+    # Read dataset tag counts into data structure
+    with open(parsed_tags_dict_file, 'rb') as handle:
+        dataset_tags = pickle.load(handle)
 
-	# Read dataset tag counts into data structure
-	with open(parsed_tags_dict_file, 'rb') as handle:
-		dataset_tags = pickle.load(handle)
+    # Format list of query tags
+    # Calculate total number of tags in dataset and query
+    query_tags = cl.Counter(query_tags)
+    query_tags_ordered = [t for t in all_tags if t in query_tags]
+    dataset_tags_tot = float(sum([dataset_tags[k] for k in query_tags_ordered]))
+    query_tags_tot = float(sum([query_tags[k] for k in query_tags_ordered]))
 
-	# Format list of query tags
-	# Calculate total number of tags in dataset and query
-	query_tags = cl.Counter(query_tags)
-	query_tags_ordered = [t for t in all_tags if t in query_tags]
-	dataset_tags_tot = float(sum([dataset_tags[k] for k in query_tags_ordered]))
-	query_tags_tot = float(sum([query_tags[k] for k in query_tags_ordered]))
+    # Data to plot
+    dataset_tag_rep = [dataset_tags[k] / dataset_tags_tot for k in query_tags_ordered]
+    query_tag_rep = [query_tags[k] / query_tags_tot for k in query_tags_ordered]
 
-	# Data to plot
-	dataset_tag_rep = [dataset_tags[k]/dataset_tags_tot for k in query_tags_ordered]
-	query_tag_rep = [query_tags[k]/query_tags_tot for k in query_tags_ordered]
+    # Plot data
+    plt.rcParams.update({'figure.autolayout': True})
+    y_pos = np.arange(len(query_tags_ordered))
+    plt.barh(y_pos - (bar_width / 2), dataset_tag_rep, bar_width, alpha=opacity, label='Dataset')
+    plt.barh(y_pos + (bar_width / 2), query_tag_rep, bar_width, alpha=opacity, label='Query')
+    plt.yticks(y_pos, query_tags_ordered)
+    plt.xlabel('Percent Representation')
+    plt.title('Genre Representation Comparison')
+    plt.legend(loc='best')
+    plt.savefig(save_file)
+    plt.close()
 
-	# Plot data
-	plt.rcParams.update({'figure.autolayout': True})
-	y_pos = np.arange(len(query_tags_ordered))
-	plt.barh(y_pos-(bar_width/2), dataset_tag_rep, bar_width, alpha=opacity, label='Dataset')
-	plt.barh(y_pos+(bar_width/2), query_tag_rep, bar_width, alpha=opacity, label='Query')
-	plt.yticks(y_pos, query_tags_ordered)
-	plt.xlabel('Percent Representation')
-	plt.title('Genre Representation Comparison')
-	plt.legend(loc='best')
-	plt.savefig(save_file)
-	plt.close()
 
 def get_suggestions(query, num_results, search_col, csv_file):
+    # Read file to dataframe
+    df = pd.read_csv(csv_file, encoding='latin1')
 
-	# Read file to dataframe
-	df = pd.read_csv(csv_file, encoding='latin1')
+    # Find closest matches
+    name_list = list(set(df[search_col].tolist()))
+    names_closest = sorted(name_list, key=lambda x: ed.eval(query, x))[:num_results]
 
-	# Find closest matches
-	name_list = list(set(df[search_col].tolist()))
-	names_closest = sorted(name_list, key=lambda x: ed.eval(query, x))[:num_results]
+    # Return results
+    return names_closest
 
-	# Return results
-	return names_closest
 
 def get_idxs(df, seed_album_id, node_sim_limit, df_limit):
-
     # This function returns rows from dataframe
     def get_row_data(df, seed, node_sim_limit):
         try:
@@ -149,7 +150,7 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
         # Define key variables
         num_results = 5
-        
+
         # Extract variables
         (artist, album) = seed_album_id.split(' - ')
 
@@ -158,6 +159,9 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
         # Do album query
         album_suggestions = get_suggestions(album, num_results, 'album_name', album_csv)
+
+        l = ""
+        return l, artist_suggestions, album_suggestions
 
     else:
         artist_suggestions = None
@@ -340,10 +344,11 @@ def main(seed_album_id='Michael Jackson' + ' - ' + 'Thriller', df_limit=50):
     show_fig = False
 
     # Generate graph
-    plot, artist_suggestions, album_suggestions = generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, height, node_size, output_file_name,
-        show_fig)
+    plot, artist_suggestions, album_suggestions = generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit,
+                                                                 width, height, node_size, output_file_name,
+                                                                 show_fig)
 
-    return plot
+    return plot, artist_suggestions, album_suggestions
 
 
 if __name__ == '__main__':
