@@ -96,16 +96,13 @@ h3 {
 </style>
 </head>
 <body>
-
 <h2>An Interactive Autoencoder for Album Covers
 </h2>
 <h3><i>Stuart Colianni, Amanpreet Kaur, Jay Pranger, Marcus Schwarting</i></h3>
-
 <div class="tabs-x align-center tabs-above tab-bordered">
   <!-- tabs -->
   <ul class="nav nav-tabs" id="myTab" role="tablist">
      <li class="nav-item" >
-
           <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-expanded="true"><i class="fa fa-group"></i>About</a>
      </li>
      <li class="nav-item">
@@ -126,7 +123,7 @@ h3 {
     <form action = "/" method = "POST">
            <div style="width:2000px"><input id="artist" type="text" name="artist" placeholder="Enter artist name" value="{{request.form.artist}}"/><p style="font-size: 0.7em;">*Examples of artist names:Michael Jackson, Eric Clapton, Bob Dylan etc.</p></div>
        <div style="width:2000px"><input id="album" type="text" name="album" placeholder="Enter album name" value="{{request.form.album}}"/><p style="font-size: 0.7em;">*Examples of album names:Thriller,From the Cradle,Dylan etc.</p></div>
-       <div style="width:2000px"><input id="numnodes" type="text" name="numnodes" placeholder="Enter number of nodes" value="{{request.form.numnodes}}"/><p style="font-size: 0.7em;">*Please note: This is the maximum number of nodes to visualize. Some albums may have fewer similar albums than the number specified.</p></div>
+       <div style="width:2000px"><input id="numnodes" type="text" name="numnodes" placeholder="Enter number of nodes" value="{{request.form.numnodes}}"/><p style="font-size: 0.7em;">*Limit = 500 - Please note: Some networks maybe smaller.</p></div>
               <div style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
                 <input class="button1" type = "button" value="Create visualization" onclick="update_graph(document.getElementById('artist').value, document.getElementById('album').value, document.getElementById('numnodes').value)"/>
               </div>
@@ -134,7 +131,6 @@ h3 {
   </div>
    <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab" ><p >To do: Add histograms</p></div>
 </div>
-
 <script>
 	function update_graph(artist, album, numnodes){
 		this.count = 0
@@ -142,19 +138,22 @@ h3 {
 			"http://127.0.0.1:5000/", 
 			{ artist: artist, album: album, numnodes: numnodes},
 			function(response) {
-				$("#bokeh_script").html(response["script"]); 
-				$("#bokeh_div").html(response["div"]);
+				debugger;
+				if (response["suggestion"] == "") {
+					$("#bokeh_script").html(response["script"]); 
+					$("#bokeh_div").html(response["div"]);
+				} else {
+					alert(response["suggestion"])
+				}
 			}
 		);
 		$("#ae_button").load("./static/ae_button_empty.txt");
 		$("#ae_div").load("./static/ae_output_empty.txt");
 	}
 </script>
-
 <div id="VAE" class="tabcontent">
   <h3>Build your own album cover</h3>
 </div>
-
 <script>
 function openTab(evt, cityName) {
   var i, tabcontent, tablinks;
@@ -171,7 +170,6 @@ function openTab(evt, cityName) {
 }
 document.getElementById("defaultOpen").click();
 </script>
-
 <script type="text/javascript">
             $(document).ready(function () {
                 $('#button').click(function (e) {
@@ -184,10 +182,8 @@ document.getElementById("defaultOpen").click();
     event.preventDefault()
 });
    </script>
-
 <script id="bokeh_script"></script>
 <div id="bokeh_div"></div>
-
 <div id="ae_button" style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
 </div>
               
@@ -203,11 +199,8 @@ function run_ae() {
 function load_output(){$("#ae_div").load("./static/ae_output.txt");}
 document.getElementById("ae_div").innerHTML = "";
 </script>
-
 <div id="ae_div"></div> 
-
 <div style="width:500px;margin-left: 460px;margin-top: 300px; justify-content: center;"></div>   
-
 <?php
     $var = $_GET['result'];
 ?>
