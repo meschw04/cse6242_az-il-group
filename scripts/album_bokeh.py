@@ -6,6 +6,8 @@ import editdistance as ed
 import ast
 import pickle
 import collections as cl
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
