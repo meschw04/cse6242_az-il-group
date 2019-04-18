@@ -53,6 +53,7 @@ def plot_bar_chart(query_tags):
 	plt.yticks(y_pos, query_tags_ordered)
 	plt.xlabel('Percent Representation')
 	plt.title('Genre Representation Comparison')
+	plt.legend(loc='best')
 	plt.savefig(save_file)
 	plt.close()
 
