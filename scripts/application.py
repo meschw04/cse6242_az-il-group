@@ -29,12 +29,12 @@ def main():
             df_limit = int(request.form['numnodes'])
             plot, suggestion = album_bokeh.main(seed_album_id=album_id, df_limit=df_limit)
             if suggestion == None:
+                suggestion = ""
                 script, div = components(plot)
-                return jsonify({"script": script, "div": div})
             else:
                 script = ""
                 div = ""
-                return jsonify({"script": script, "div": div})
+            return jsonify({"script": script, "div": div, "suggestion": suggestion})
 
     return render_template('index.html', script=blank_script, div=blank_div, error=error)
 
