@@ -1,4 +1,5 @@
 from flask import *
+from flask_cors import CORS
 import album_bokeh
 import run_autoencoder
 from bokeh.embed import components
@@ -9,6 +10,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__,template_folder="templates")
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+CORS(app)
 
 @app.route('/', methods=['POST', 'GET'])
 def main():

@@ -243,7 +243,7 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
 def main(seed_album_id='Michael Jackson' + ' - ' + 'Thriller', df_limit=50):
     # Define key variables
-    album_csv = 'large_test.csv'
+    album_csv = 'dataset.csv'
     node_sim_limit = 5
     if df_limit > 500:
         df_limit = 500
