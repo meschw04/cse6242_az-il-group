@@ -2,6 +2,8 @@ from keras import backend as K
 from keras.models import load_model
 import matplotlib.pyplot as plt
 import sys
+from datetime import datetime
+print (datetime.now())
 try:
     #sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
     import cv2
@@ -63,7 +65,11 @@ def run_autoencoder(url1, url2):
     
     axarr[1,4].imshow(cv2.cvtColor(np.uint8(test2), cv2.COLOR_BGR2RGB))
     axarr[1,5].set_axis_off()
-    plt.savefig("./static/img/ae_output.png")
+    fname = "./static/img/ae_output"+str(datetime.now()).replace(" ","-")+".png"
+    plt.savefig(fname)
+    with open("./static/ae_output.txt","w") as f:
+        f.write('<div id="ae_div"> <img src="'+fname+'"/></img> </div>')
+
     os.remove('url1.png')
     os.remove('url2.png')
     plt.clf()
