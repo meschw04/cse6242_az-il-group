@@ -59,9 +59,7 @@ def plot_bar_chart(query_tags):
     plt.close()
 
 
-def get_suggestions(query, num_results, search_col, csv_file):
-    # Read file to dataframe
-    df = pd.read_csv(csv_file, encoding='latin1')
+def get_suggestions(query, num_results, search_col, df):
 
     # Find closest matches
     name_list = list(set(df[search_col].tolist()))
@@ -150,22 +148,39 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
         # Define key variables
         num_results = 5
+        artist_list = df['artist'].tolist()
+        album_list = df['album_name'].tolist()
 
         # Extract variables
         (artist, album) = seed_album_id.split(' - ')
 
         # Do artist query
-        artist_suggestions = get_suggestions(artist, num_results, 'artist', album_csv)
+        artist_suggestions = get_suggestions(artist, num_results, 'artist', df)
 
         # Do album query
-        album_suggestions = get_suggestions(album, num_results, 'album_name', album_csv)
+        album_suggestions = get_suggestions(album, num_results, 'album_name', df)
 
+        # Do artist - album pair query
+        artist_album_suggestions = get_suggestions(seed_album_id, num_results, 'album_id', df)
+
+        # Check if artist doesn't exists, but album does
+        if (artist not in artist_list) and (album in album_list):
+            suggestion = 'Artist not found, try: {}'.format(artist_suggestions)
+
+        # Check if artist exists, but album doesn't
+        elif (artist in artist_list) and (album not in album_list):
+            suggestion = 'Album not found, try: {}'.format(album_suggestions)
+
+        # If neither exists, then suggest best artist - album pairs
+        else:
+            suggestion = 'Artist - Album not found, try: {}'.format(artist_album_suggestions)
+
+        # Return suggestion
         l = ""
-        return l, artist_suggestions, album_suggestions
+        return l, suggestion
 
     else:
-        artist_suggestions = None
-        album_suggestions = None
+        suggestion = None
         df = df.loc[keep_idxs]
 
     # Create bar chart comparing genre representation
@@ -326,7 +341,7 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
     if show_fig:
         show(l)
-    return l, artist_suggestions, album_suggestions
+    return l, suggestion
 
 
 def main(seed_album_id='Michael Jackson' + ' - ' + 'Thriller', df_limit=50):
@@ -344,11 +359,14 @@ def main(seed_album_id='Michael Jackson' + ' - ' + 'Thriller', df_limit=50):
     show_fig = False
 
     # Generate graph
-    plot, artist_suggestions, album_suggestions = generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit,
-                                                                 width, height, node_size, output_file_name,
-                                                                 show_fig)
+    plot, suggestion = generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit,
+                                      width, height, node_size, output_file_name, show_fig)
 
-    return plot, artist_suggestions, album_suggestions
+    print('\n\n\n')
+    print(suggestion)
+    print('\n\n\n')
+
+    return plot, suggestion
 
 
 if __name__ == '__main__':

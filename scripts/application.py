@@ -27,13 +27,13 @@ def main():
         else:
             album_id = request.form['artist'] + " - " + request.form['album']
             df_limit = int(request.form['numnodes'])
-            plot, artist_suggestions, album_suggestions = album_bokeh.main(seed_album_id=album_id, df_limit=df_limit)
-            if artist_suggestions == None:
-                script = ""
-                div = ""
+            plot, suggestion = album_bokeh.main(seed_album_id=album_id, df_limit=df_limit)
+            if suggestion == None:
+                script, div = components(plot)
                 return jsonify({"script": script, "div": div})
             else:
-                script, div = components(plot)
+                script = ""
+                div = ""
                 return jsonify({"script": script, "div": div})
 
     return render_template('index.html', script=blank_script, div=blank_div, error=error)
