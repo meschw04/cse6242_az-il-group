@@ -2,6 +2,7 @@ import networkx as nx
 import pandas as pd
 import ast
 import random
+import editdistance as ed
 
 from bokeh.io import show, output_file
 from bokeh.models import Plot, Range1d, MultiLine, Circle, HoverTool, WheelZoomTool, PanTool, ResetTool, CustomJS, \
@@ -10,7 +11,20 @@ from bokeh.models.graphs import from_networkx
 from bokeh.models.widgets import Select
 from bokeh.layouts import layout, column
 
+def get_suggestions(query, num_results, search_col, csv_file):
+
+	# Read file to dataframe
+	df = pd.read_csv(csv_file, encoding='latin1')
+
+	# Find closest matches
+	name_list = list(set(df[search_col].tolist()))
+	names_closest = sorted(name_list, key=lambda x: ed.eval(query, x))[:num_results]
+
+	# Return results
+	return names_closest
+
 def get_idxs(df, seed_album_id, node_sim_limit, df_limit):
+
     # This function returns rows from dataframe
     def get_row_data(df, seed, node_sim_limit):
         try:
@@ -83,8 +97,27 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
     df['album_id'] = df['artist'] + ' - ' + df['album_name']
 
     # Parse dataframe
+    # If seed is not in dataset, then return list of suggestions
     keep_idxs = get_idxs(df, seed_album_id, node_sim_limit, df_limit)
-    df = df.loc[keep_idxs]
+    if len(keep_idxs) == 0:
+
+        # Define key variables
+        num_results = 5
+        
+        # Extract variables
+        (artist, album) = seed_album_id.split(' - ')
+
+        # Do artist query
+        artist_suggestions = get_suggestions(artist, num_results, 'artist', album_csv)
+
+        # Do album query
+        album_suggestions = get_suggestions(album, num_results, 'album_name', album_csv)
+
+        # Combine suggestions
+        suggestions = (artist_suggestions, album_suggestions)
+
+    else:
+        df = df.loc[keep_idxs]
 
     # Add nodes to graph
     album_edges = []
@@ -238,7 +271,7 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
     if show_fig:
         show(l)
-    return l
+    return l, suggestions
 
 
 def main(seed_album_id='Michael Jackson' + ' - ' + 'Thriller', df_limit=50):
@@ -256,7 +289,7 @@ def main(seed_album_id='Michael Jackson' + ' - ' + 'Thriller', df_limit=50):
     show_fig = False
 
     # Generate graph
-    plot = generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, height, node_size, output_file_name,
+    plot, (artist_suggestions, album_suggestions) = generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, height, node_size, output_file_name,
         show_fig)
 
     return plot
