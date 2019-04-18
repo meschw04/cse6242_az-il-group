@@ -8,3 +8,4 @@ numpy==1.16.2
 opencv-python==4.1.0.25
 pandas==0.24.2
 tensorflow==1.13.1
+editdistance

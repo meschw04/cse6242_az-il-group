@@ -113,10 +113,9 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
         # Do album query
         album_suggestions = get_suggestions(album, num_results, 'album_name', album_csv)
 
-        # Combine suggestions
-        suggestions = (artist_suggestions, album_suggestions)
-
     else:
+        artist_suggestions = None
+        album_suggestions = None
         df = df.loc[keep_idxs]
 
     # Add nodes to graph
@@ -271,7 +270,7 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
     if show_fig:
         show(l)
-    return l, suggestions
+    return l, artist_suggestions, album_suggestions
 
 
 def main(seed_album_id='Michael Jackson' + ' - ' + 'Thriller', df_limit=50):
@@ -289,7 +288,7 @@ def main(seed_album_id='Michael Jackson' + ' - ' + 'Thriller', df_limit=50):
     show_fig = False
 
     # Generate graph
-    plot, (artist_suggestions, album_suggestions) = generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, height, node_size, output_file_name,
+    plot, artist_suggestions, album_suggestions = generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, height, node_size, output_file_name,
         show_fig)
 
     return plot
