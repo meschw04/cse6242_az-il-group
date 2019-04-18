@@ -137,6 +137,7 @@ h3 {
 
 <script>
 	function update_graph(artist, album, numnodes){
+		this.count = 0
 		$.post( 
 			"http://127.0.0.1:5000/", 
 			{ artist: artist, album: album, numnodes: numnodes},
