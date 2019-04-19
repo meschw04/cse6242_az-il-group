@@ -89,23 +89,28 @@ h3 {
 }
 .row {
   display: flex;
+  min-width: 1600px;
 }
-
-.column {
+.column_bok {
+  display:inline-block;
   flex: 25%;
   padding: 5px;
+}
+.column_gen {
+  display:inline-block;
+  flex: 25%;
+  padding: 5px;
+  margin-top: 90px;
 }
 .row2 {
   display: flex;
   flex-wrap: wrap;
   padding: 0 4px;
 }
-
 .column2 {
   flex: 50%;
   padding: 0 4px;
 }
-
 .column2 img {
   margin-top: 8px;
   vertical-align: middle;
@@ -157,14 +162,13 @@ h3 {
               </form>
       <script id="bokeh_script"></script>
 <div class="row">
-<div class="column" id="bokeh_div"></div>
-<div class="column" id="genre_div" style="width:50%"></div>
+<div class="column_bok" id="bokeh_div"></div>
+<div class="column_gen" id="genre_div"></div>
 </div>
 <div id="ae_button" style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
 </div>
 <div id="ae_div"></div> 
 <div style="width:500px;margin-left: 460px;margin-top: 300px; justify-content: center;"></div>   
-
   </div>
    <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab" ><h3 style="text-align: left;margin-left: 40px;">Representation of albums for the most popular genres in dataset</h3>
    <img src="./static/img/pca.jpg" alt="PCA" style="width:600px;margin-left: 5px;margin-top: 10px;"/>
@@ -185,11 +189,10 @@ h3 {
 			"http://127.0.0.1:5000/", 
 			{ artist: artist, album: album, numnodes: numnodes},
 			function(response) {
-				debugger;
 				if (response["suggestion"] == "") {
 					$("#bokeh_script").html(response["script"]); 
 					$("#bokeh_div").html(response["div"]);
-          $("#genre_div").load("./static/genre.txt");
+					$("#genre_div").load("./static/genre.txt");
 				} else {
 					alert(response["suggestion"])
 				}
@@ -197,7 +200,6 @@ h3 {
 		);
 		$("#ae_button").load("./static/ae_button_empty.txt");
 		$("#ae_div").load("./static/ae_output_empty.txt");
-
 	}
   
 </script>
@@ -220,10 +222,7 @@ function openTab(evt, cityName) {
 }
 document.getElementById("defaultOpen").click();
 </script>
-
-
               
-
 <script>
 function run_ae() {
   $("#ae_div").load("./static/ae_output_empty.txt");
@@ -236,7 +235,6 @@ function run_ae() {
 function load_output(){$("#ae_div").load("./static/ae_output.txt");}
 document.getElementById("ae_div").innerHTML = "";
 </script>
-
 <?php
     $var = $_GET['result'];
 ?>
