@@ -12,7 +12,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
-from bokeh.io import show, output_file
+from bokeh.io import show
 from bokeh.models import Plot, Range1d, MultiLine, Circle, HoverTool, WheelZoomTool, PanTool, ResetTool, CustomJS, \
     TapTool
 from bokeh.models.graphs import from_networkx
@@ -57,7 +57,7 @@ def plot_bar_chart(query_tags):
     plt.legend(loc='best')
     plt.savefig(save_file)
     with open("./static/genre.txt","w") as f:
-        f.write('<div id="genre_div"> <img src="'+save_file+'"/></img> </div>')
+        f.write('<div id="genre_div"> <img src="'+save_file+'" width="450px"/></img> </div>')
     plt.close()
 
 
@@ -135,7 +135,7 @@ def get_idxs(df, seed_album_id, node_sim_limit, df_limit):
     return keep_idxs
 
 
-def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, height, node_size, output_file_name,
+def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, height, node_size,
                    show_fig):
     # Read data into a pandas dataframe
     df = pd.read_csv(album_csv, encoding='latin1')
@@ -302,8 +302,7 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
         $("#ae_button").load("./static/ae_button.txt");
     }
     """)
-    # , function (data) {var obj = JSON.parse(data); debugger;}
-    # add above back in to $.Post to receive data from flask
+
     node_select_tool = TapTool(callback=callback)
 
     callback2 = CustomJS(args=dict(source=graph_renderer.node_renderer.data_source, length=G.number_of_nodes()), code=
@@ -332,7 +331,6 @@ def generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit, width, he
 
     plot.add_tools(node_hover_tool, WheelZoomTool(), PanTool(), ResetTool(), node_select_tool)
     plot.renderers.append(graph_renderer)
-    output_file(output_file_name)
 
     controls = [genre]
     inputs = column(*controls, width=320, height=90)
@@ -355,18 +353,13 @@ def main(seed_album_id='Michael Jackson' + ' - ' + 'Thriller', df_limit=50):
     node_size = 15
     if df_limit > 200:
         node_size = 10
-    width = 1200
+    width = 1000
     height = 600
-    output_file_name = 'interactive_graphs.html'
     show_fig = False
 
     # Generate graph
     plot, suggestion = generate_graph(album_csv, seed_album_id, node_sim_limit, df_limit,
-                                      width, height, node_size, output_file_name, show_fig)
-
-    print('\n\n\n')
-    print(suggestion)
-    print('\n\n\n')
+                                      width, height, node_size, show_fig)
 
     return plot, suggestion
 
