@@ -18,7 +18,7 @@ from bokeh.models import Plot, Range1d, MultiLine, Circle, HoverTool, WheelZoomT
 from bokeh.models.graphs import from_networkx
 from bokeh.models.widgets import Select
 from bokeh.layouts import layout, column
-
+from datetime import datetime
 
 def plot_bar_chart(query_tags):
     # Define key variables
@@ -29,7 +29,7 @@ def plot_bar_chart(query_tags):
                 'singer-songwriter', 'ambient'][::-1]
     bar_width = 0.3
     opacity = 1.0
-    save_file = 'genre_bar_chart.png'
+    save_file = "./static/img/genre_bar_chart_"+str(datetime.now()).replace(" ","-").replace(":","-")+".png"
 
     # Read dataset tag counts into data structure
     with open(parsed_tags_dict_file, 'rb') as handle:
@@ -56,6 +56,8 @@ def plot_bar_chart(query_tags):
     plt.title('Genre Representation Comparison')
     plt.legend(loc='best')
     plt.savefig(save_file)
+    with open("./static/genre.txt","w") as f:
+        f.write('<div id="genre_div"> <img src="'+save_file+'"/></img> </div>')
     plt.close()
 
 

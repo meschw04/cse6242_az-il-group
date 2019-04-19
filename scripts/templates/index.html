@@ -87,12 +87,36 @@ h3 {
 .tab-content { 
   background-color: #FAFAFA;
 }
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 25%;
+  padding: 5px;
+}
+.row2 {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 4px;
+}
+
+.column2 {
+  flex: 50%;
+  padding: 0 4px;
+}
+
+.column2 img {
+  margin-top: 8px;
+  vertical-align: middle;
+}
 @media only screen and (max-width: 479px){
     .tab .nav-tabs li{
         width: 100%;
         text-align: center;
         margin-bottom: 5px;
     }
+  
 </style>
 </head>
 <body>
@@ -103,13 +127,16 @@ h3 {
   <!-- tabs -->
   <ul class="nav nav-tabs" id="myTab" role="tablist">
      <li class="nav-item" >
-          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-expanded="true"><i class="fa fa-group"></i>About</a>
+          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-expanded="true"><i class="fa fa-home"></i>Home</a>
      </li>
      <li class="nav-item">
           <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"><i class="fa fa-area-chart"></i>Dashboard</a>
      </li>
      <li class="nav-item">
           <a class="nav-link" id="summary-tab" data-toggle="tab" href="#summary" role="tab" aria-controls="summary"><i class="fa fa-line-chart"></i>Data summary</a>
+     </li>
+     <li class="nav-item">
+          <a class="nav-link" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about"><i class="fa fa-group"></i>About</a>
      </li>
   </ul>
   <!-- tab panes -->
@@ -125,11 +152,21 @@ h3 {
        <div style="width:2000px"><input id="album" type="text" name="album" placeholder="Enter album name" value="{{request.form.album}}"/><p style="font-size: 0.7em;">*Examples of album names:Thriller,From the Cradle,Dylan etc.</p></div>
        <div style="width:2000px"><input id="numnodes" type="text" name="numnodes" placeholder="Enter number of nodes" value="{{request.form.numnodes}}"/><p style="font-size: 0.7em;">*Limit = 500 - Please note: Some networks maybe smaller.</p></div>
               <div style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
-                <input class="button1" type = "button" value="Create visualization" onclick="update_graph(document.getElementById('artist').value, document.getElementById('album').value, document.getElementById('numnodes').value)"/>
+                <input class="button1" type = "button" value="Create visualization" onclick="update_graph(document.getElementById('artist').value, document.getElementById('album').value, document.getElementById('numnodes').value);return false;"/>
               </div>
               </form>
   </div>
-   <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab" ><p >To do: Add histograms</p></div>
+   <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab" ><h3 style="text-align: left;margin-left: 40px;">Representation of albums for the most popular genres in dataset</h3>
+   <img src="./static/img/pca.jpg" alt="PCA" style="width:600px;margin-left: 5px;margin-top: 10px;"/>
+ </div>
+ <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab" >
+  <div class="row2">
+   <div class="column2"><img src="./static/img/Stuart.jpg" alt="PCA" style="width:100px"/><h3 style="text-align: left;margin-left: 40px;">Stuart Colianni <br> Gatech: scolianni3@gatech.edu <br> LinkedIn: <a href="https://www.linkedin.com/in/stuart-colianni-5209bb79" target="_blank">https://www.linkedin.com/in/stuart-colianni-5209bb79</a></h3></div>
+   <div class="column2"><img src="./static/img/Amanpreet.jpg" alt="PCA" style="width:100px;"/><h3 style="text-align: left;margin-left: 40px;">Amanpreet Kaur <br> Gatech: akaur34@gatech.edu <br> LinkedIn: <a href="https://www.linkedin.com/in/kaur-amanpreet" target="_blank">https://www.linkedin.com/in/kaur-amanpreet</a></h3></div>
+   <div class="column2"><img src="./static/img/Jay.jpg" alt="PCA" style="width:100px;"/><h3 style="text-align: left;margin-left: 40px;">Jay Pranger <br> Gatech: jay.pranger@gatech.edu <br> LinkedIn: <a href="https://www.linkedin.com/in/jaypranger/" target="_blank">https://www.linkedin.com/in/jaypranger/</a></h3></div>
+   <div class="column2"><img src="./static/img/Marcus.jpg" alt="PCA" style="width:100px;"/><h3 style="text-align: left;margin-left: 40px;">Marcus Schwarting <br> Gatech: mschwarting3@gatech.edu <br> LinkedIn: <a href="https://www.linkedin.com/in/marcus-s-a7779486/" target="_blank">https://www.linkedin.com/in/marcus-s-a7779486/</a></h3></div>
+ </div>
+ </div>
 </div>
 <script>
 	function update_graph(artist, album, numnodes){
@@ -142,6 +179,7 @@ h3 {
 				if (response["suggestion"] == "") {
 					$("#bokeh_script").html(response["script"]); 
 					$("#bokeh_div").html(response["div"]);
+          $("#genre_div").load("./static/genre.txt");
 				} else {
 					alert(response["suggestion"])
 				}
@@ -149,7 +187,9 @@ h3 {
 		);
 		$("#ae_button").load("./static/ae_button_empty.txt");
 		$("#ae_div").load("./static/ae_output_empty.txt");
+
 	}
+  
 </script>
 <div id="VAE" class="tabcontent">
   <h3>Build your own album cover</h3>
@@ -170,23 +210,16 @@ function openTab(evt, cityName) {
 }
 document.getElementById("defaultOpen").click();
 </script>
-<script type="text/javascript">
-            $(document).ready(function () {
-                $('#button').click(function (e) {
-                $("#loading").show();
-                $("#content").hide();
-                e.preventDefault();
-            });
-            });
-     document.getElementById("submit").addEventListener("click", function(event){
-    event.preventDefault()
-});
-   </script>
+
 <script id="bokeh_script"></script>
-<div id="bokeh_div"></div>
+<div class="row">
+<div class="column" id="bokeh_div"></div>
+<div class="column" id="genre_div" style="width:50%"></div>
+</div>
 <div id="ae_button" style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
 </div>
               
+
 <script>
 function run_ae() {
   $("#ae_div").load("./static/ae_output_empty.txt");
