@@ -155,6 +155,16 @@ h3 {
                 <input class="button1" type = "button" value="Create visualization" onclick="update_graph(document.getElementById('artist').value, document.getElementById('album').value, document.getElementById('numnodes').value);return false;"/>
               </div>
               </form>
+      <script id="bokeh_script"></script>
+<div class="row">
+<div class="column" id="bokeh_div"></div>
+<div class="column" id="genre_div" style="width:50%"></div>
+</div>
+<div id="ae_button" style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
+</div>
+<div id="ae_div"></div> 
+<div style="width:500px;margin-left: 460px;margin-top: 300px; justify-content: center;"></div>   
+
   </div>
    <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab" ><h3 style="text-align: left;margin-left: 40px;">Representation of albums for the most popular genres in dataset</h3>
    <img src="./static/img/pca.jpg" alt="PCA" style="width:600px;margin-left: 5px;margin-top: 10px;"/>
@@ -211,13 +221,7 @@ function openTab(evt, cityName) {
 document.getElementById("defaultOpen").click();
 </script>
 
-<script id="bokeh_script"></script>
-<div class="row">
-<div class="column" id="bokeh_div"></div>
-<div class="column" id="genre_div" style="width:50%"></div>
-</div>
-<div id="ae_button" style="width:500px;margin-left: 460px;margin-top: 10px;justify-content: center;">
-</div>
+
               
 
 <script>
@@ -232,8 +236,7 @@ function run_ae() {
 function load_output(){$("#ae_div").load("./static/ae_output.txt");}
 document.getElementById("ae_div").innerHTML = "";
 </script>
-<div id="ae_div"></div> 
-<div style="width:500px;margin-left: 460px;margin-top: 300px; justify-content: center;"></div>   
+
 <?php
     $var = $_GET['result'];
 ?>
