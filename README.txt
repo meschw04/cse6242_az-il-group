@@ -46,3 +46,5 @@ For now, the authors have provided an API key in code(lastfm_api_calls.py) but i
 
 The run_autoencoder.py script loads the existing models to generate album covers that the users see on UI. But to build a new model or change the existing model, 2-autoencoder.ipynb must be used.
 
+For more details on dependencies, installation and execution visit the below Youtube link:
+	https://www.youtube.com/watch?v=Ca9OdOv-4rk&feature=youtu.be
