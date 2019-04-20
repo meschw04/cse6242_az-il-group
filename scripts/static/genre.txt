@@ -1,1 +1,1 @@
-<div id="genre_div"> <img src="./static/img/genre_bar_chart_2019-04-19-16-53-05.589702.png" width="450px"/></img> </div>
+<div id="genre_div"> <img src="./static/img/genre_bar_chart_2019-04-20-10-26-28.948069.png" width="450px"/></img> </div>
